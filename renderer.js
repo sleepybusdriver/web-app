@@ -32,8 +32,8 @@ function calculate() {
     const craftsPerDay = Math.floor((24 / timePerCraft) * 4);
     const costGold = Math.floor(baseGold * (1 - costReduction));
 
-    const uncommon = 86;
-    const common = 45;
+    const uncommon = 45;
+    const common = 86;
     const abidos = 33;
 
     const priceCommon = get("woodCommon") / 100;
@@ -76,8 +76,8 @@ function updateShoppingList(useSturdyForAbidos, useSturdyForCommon) {
     const list = document.getElementById("shoppingList");
     list.innerHTML = "";
 
-    const totalUncommon = 86 * 40;
-    const totalCommon = 45 * 40;
+    const totalUncommon = 45 * 40;
+    const totalCommon = 86 * 40;
     const totalAbidos = 33 * 40;
 
     if (useSturdyForAbidos) {
