@@ -1,5 +1,8 @@
-document.querySelectorAll("input").forEach((el) => {
-    el.addEventListener("input", calculate);
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("input").forEach((el) => {
+        el.addEventListener("input", calculate);
+    });
+    calculate(); // einmal initial ausführen
 });
 
 function get(id) {
@@ -171,5 +174,3 @@ function updateTradeAnalysis() {
         analysis.innerHTML += `📌 <b>Common:</b> Direkter Kauf ist <b>${Math.abs(commonDiff).toFixed(2)}g</b> günstiger.<br>`;
     }
 }
-
-calculate();
