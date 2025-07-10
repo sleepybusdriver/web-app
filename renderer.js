@@ -1,9 +1,20 @@
+
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("input").forEach((el) => {
-        el.addEventListener("input", calculate);
+        // Lade gespeicherte Werte
+        const saved = localStorage.getItem(el.id);
+        if (saved !== null) el.value = saved;
+
+        // Event Listener mit Speicherung
+        el.addEventListener("input", () => {
+            localStorage.setItem(el.id, el.value);
+            calculate();
+        });
     });
-    calculate(); // einmal initial ausführen
+
+    calculate();
 });
+
 
 function get(id) {
     return parseFloat(document.getElementById(id).value) || 0;
@@ -15,7 +26,6 @@ function calculate() {
     const costReduction = get("costReduction") / 100;
     const greaterSuccess = get("greaterSuccess") / 100;
     const specialSuccess = get("specialSuccess") / 100;
-    const effectiveSuccess = 1 + (1 * greaterSuccess * (1 + specialSuccess));
     const successMultiplier = 1 + greaterSuccess * (1 + specialSuccess);
 
     const timePerCraft = 1 * (1 - timeReduction);
@@ -58,7 +68,7 @@ function calculate() {
   `;
 
     updateShoppingList(effectiveAbidos === abidosFromSturdy, effectiveCommon === commonFromSturdy);
-    updateTradeAnalysis();
+    updateTradeAnalysis(craftsPerDay, profitPerDay);
     updateChart();
 }
 
@@ -148,7 +158,7 @@ function updateChart() {
     });
 }
 
-function updateTradeAnalysis() {
+function updateTradeAnalysis(craftsPerDay, profitPerDay) {
     const analysis = document.getElementById("tradeAnalysis");
     analysis.innerHTML = "";
 
@@ -163,14 +173,16 @@ function updateTradeAnalysis() {
     const commonDiff = commonPrice - sturdyToCommon;
 
     if (abidosDiff > 0) {
-        analysis.innerHTML += `💡 <b>Abidos:</b> Durch Sturdy-Tausch sparst du <b>${abidosDiff.toFixed(2)}g</b> pro Einheit.<br>`;
+        analysis.innerHTML += `💡 <b>Abidos:</b> Durch Sturdy-Tausch sparst du <b>${abidosDiff.toFixed(2)}g</b> pro Einheit → <b>${Math.round(abidosDiff * 33 * craftsPerDay)}g/Tag</b><br>`;
     } else {
         analysis.innerHTML += `📌 <b>Abidos:</b> Direkter Kauf ist <b>${Math.abs(abidosDiff).toFixed(2)}g</b> günstiger.<br>`;
     }
 
     if (commonDiff > 0) {
-        analysis.innerHTML += `💡 <b>Common:</b> Durch Sturdy-Tausch sparst du <b>${commonDiff.toFixed(2)}g</b> pro Einheit.<br>`;
+        analysis.innerHTML += `💡 <b>Common:</b> Durch Sturdy-Tausch sparst du <b>${commonDiff.toFixed(2)}g</b> pro Einheit → <b>${Math.round(commonDiff * 45 * craftsPerDay)}g/Tag</b><br>`;
     } else {
         analysis.innerHTML += `📌 <b>Common:</b> Direkter Kauf ist <b>${Math.abs(commonDiff).toFixed(2)}g</b> günstiger.<br>`;
     }
 }
+
+calculate();
