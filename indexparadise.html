@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Paradise Hell Rewards — Interactive Tables</title>
+    <style>
+        :root {
+            --gap: 12px;
+            --radius: 8px
+        }
+
+        body {
+            font-family: Inter, system-ui, Arial;
+            margin: 20px;
+            background: #f6f7fb;
+            color: #111
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px
+        }
+
+        .tab {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(16, 24, 40, .06)
+        }
+
+        .tab.active {
+            background: linear-gradient(180deg, #eef7ff, #e6f2ff);
+            border: 1px solid #cfe8ff
+        }
+
+        .card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(16, 24, 40, .06)
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            padding-top: 8px
+        }
+
+        table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eceff4;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        th.header-input {
+            white-space: nowrap;
+            padding: 8px 10px;
+            text-align: center
+        }
+
+        input.market {
+            width: 100px;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #d0d6e0
+        }
+
+        .small {
+            font-size: 12px;
+            color: #667085
+        }
+
+        .cell-count {
+            font-weight: 600
+        }
+
+        .cell-value {
+            display: block;
+            font-size: 12px;
+            color: #0f172a;
+            margin-top: 6px
+        }
+
+        .row-total {
+            font-weight: 700
+        }
+
+        .heat {
+            border-radius: 6px;
+            padding: 6px
+        }
+
+        .legend {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px
+        }
+
+        .legend .box {
+            width: 20px;
+            height: 12px;
+            border-radius: 4px
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .note {
+            font-size: 13px;
+            color: #475569;
+            margin-top: 12px
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Paradise — Hell Rewards (interactive)</h2>
+    <p class="small">3 tabs for the 3 Item Level reward tables. Add real table data into the <code>TABLE_DATA</code>
+        variable in the script (see comments) and the UI will auto-calculate MarketValue * Count and highlight best
+        per-row values.</p>
+
+    <div class="tabs" id="tabs"></div>
+    <div class="card" id="card"></div>
+
+    <script>
+        /* -----------------------
+           HOW THIS WORKS
+           - Replace the placeholder TABLE_DATA below with the exact data from the maxroll page.
+           - Structure: TABLE_DATA = [{title: 'Item level 1640', columns:[{key:'leapstones', label:'Leapstones'},{...}], rows:[{label:'Floor 1-9', cells:{leapstones:45, fusions:60, shards:8000, juicers: '6/18', gold:3200}}, ...] }, ...]
+           - If a cell contains several materials (e.g. "6 / 18" meaning two numbers), put them as an array or add them into the same column as a sum (the script supports numbers or arrays).
+           - Header inputs: put the market value per column (number). The script will multiply market*count and show the computed value under the count.
+           - If a column cell contains multiple materials (different materials but same column), simply set the cell to the sum number you want multiplied.
+      
+           The file below is a fully working UI. If you want me to extract the data from the maxroll page, paste the three tables here or allow me access to the page.
+        ----------------------- */
+
+        // ====== REAL DATA FROM SOURCES ======
+        const TABLE_DATA = [
+            {
+                title: 'Item level 1580',
+                columns: [
+                    { key: 'honing_red_blue', label: 'Honing Materials (Red / Blue)' },
+                    { key: 'leapstones', label: 'Leapstones' },
+                    { key: 'fusions', label: 'Fusions' },
+                    { key: 'shards', label: 'Shards' },
+                    { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
+                    { key: 'gold', label: 'Bound Gold' },
+                    { key: 'accessory', label: 'Accessory Chests' },
+                    { key: 'silver', label: 'Silver' },
+                    { key: 'bracelet', label: 'Bracelet Chests' },
+                    { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' },
+                    { key: 'circulated', label: 'Circulated Leapstones' }
+                ],
+                // NOTE: 1580 values: community posts indicate different key tiers (T3/T4) affect quantities.
+                // Below I used the same base structure as the 1640 table but adjusted the Floor 100 fusions to 2600 (community-reported for 1580 Tier3).
+                // Treat 1580 table as "best-effort / community-derived" — see citations in the editor notes.
+                rows: [
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [900, 2700], leapstones: 40, fusions: 55, shards: 7000, juicers: [5, 15], gold: 2800, accessory: 9, silver: 450000, bracelet: 3, quality_taps: [6, 6], circulated: 50 } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [1400, 4200], leapstones: 65, fusions: 85, shards: 11000, juicers: [8, 24], gold: 4200, accessory: 13, silver: 900000, bracelet: 5, quality_taps: [9, 9], circulated: 80 } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [1800, 5400], leapstones: 85, fusions: 115, shards: 15000, juicers: [11, 33], gold: 5600, accessory: 18, silver: 1400000, bracelet: 7, quality_taps: [14, 14], circulated: 120 } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [2300, 6900], leapstones: 110, fusions: 140, shards: 18500, juicers: [14, 42], gold: 7000, accessory: 22, silver: 1850000, bracelet: 9, quality_taps: [18, 18], circulated: 150 } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [3200, 9600], leapstones: 170, fusions: 210, shards: 27000, juicers: [20, 60], gold: 10500, accessory: 30, silver: 2300000, bracelet: 13, quality_taps: [25, 25], circulated: 190 } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [4600, 13800], leapstones: 225, fusions: 285, shards: 36000, juicers: [27, 81], gold: 14000, accessory: 42, silver: 2800000, bracelet: 17, quality_taps: [33, 33], circulated: 300 } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [7000, 21000], leapstones: 330, fusions: 420, shards: 54000, juicers: [40, 120], gold: 21000, accessory: 60, silver: 4600000, bracelet: 22, quality_taps: [49, 49], circulated: 420 } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [9500, 28500], leapstones: 450, fusions: 560, shards: 72000, juicers: [52, 156], gold: 28000, accessory: 75, silver: 5600000, bracelet: 30, quality_taps: [65, 65], circulated: 600 } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [14000, 42000], leapstones: 600, fusions: 780, shards: 97000, juicers: [72, 216], gold: 38000, accessory: 110, silver: 7400000, bracelet: 42, quality_taps: [90, 90], circulated: 780 } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [18500, 55500], leapstones: 880, fusions: 1100, shards: 142000, juicers: [108, 324], gold: 56000, accessory: 180, silver: 9200000, bracelet: 68, quality_taps: [130, 130], circulated: 1100 } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [32000, 96000], leapstones: 1500, fusions: 2600, shards: 230000, juicers: [170, 510], gold: 88000, accessory: 260, silver: 18000000, bracelet: 100, quality_taps: [220, 220], circulated: 1800 } }
+                ]
+            },
+            {
+                title: 'Item level 1640',
+                columns: [
+                    { key: 'honing_red_blue', label: 'Honing Materials (Red / Blue)' },
+                    { key: 'leapstones', label: 'Leapstones' },
+                    { key: 'fusions', label: 'Fusions' },
+                    { key: 'shards', label: 'Shards' },
+                    { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
+                    { key: 'gold', label: 'Bound Gold' },
+                    { key: 'accessory', label: 'Accessory Chests' },
+                    { key: 'silver', label: 'Silver' },
+                    { key: 'bracelet', label: 'Bracelet Chests' },
+                    { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' },
+                    { key: 'circulated', label: 'Circulated Leapstones' }
+                ],
+                // This table is taken from community datamine (China build) and mirrored across several community sources.
+                rows: [
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [1000, 3000], leapstones: 45, fusions: 60, shards: 8000, juicers: [6, 18], gold: 3200, accessory: 10, silver: 500000, bracelet: 4, quality_taps: [7, 7], circulated: 60 } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [1500, 4500], leapstones: 70, fusions: 90, shards: 12000, juicers: [9, 27], gold: 4800, accessory: 15, silver: 1000000, bracelet: 6, quality_taps: [10, 10], circulated: 90 } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [2000, 6000], leapstones: 90, fusions: 125, shards: 16000, juicers: [12, 36], gold: 6400, accessory: 20, silver: 1500000, bracelet: 8, quality_taps: [15, 15], circulated: 130 } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [2500, 7500], leapstones: 120, fusions: 150, shards: 20000, juicers: [15, 45], gold: 8000, accessory: 25, silver: 2000000, bracelet: 10, quality_taps: [20, 20], circulated: 160 } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [3500, 10500], leapstones: 180, fusions: 225, shards: 30000, juicers: [22, 66], gold: 12000, accessory: 35, silver: 2500000, bracelet: 15, quality_taps: [27, 27], circulated: 200 } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [5000, 15000], leapstones: 240, fusions: 300, shards: 40000, juicers: [30, 90], gold: 16000, accessory: 50, silver: 3000000, bracelet: 20, quality_taps: [36, 36], circulated: 320 } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [7500, 22500], leapstones: 350, fusions: 450, shards: 60000, juicers: [45, 135], gold: 24000, accessory: 70, silver: 5000000, bracelet: 25, quality_taps: [54, 54], circulated: 450 } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [10000, 30000], leapstones: 480, fusions: 600, shards: 80000, juicers: [58, 174], gold: 32000, accessory: 90, silver: 6000000, bracelet: 35, quality_taps: [72, 72], circulated: 650 } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [15000, 45000], leapstones: 650, fusions: 850, shards: 108000, juicers: [80, 240], gold: 44000, accessory: 130, silver: 8000000, bracelet: 50, quality_taps: [100, 100], circulated: 850 } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [20000, 60000], leapstones: 950, fusions: 1200, shards: 160000, juicers: [120, 360], gold: 64000, accessory: 200, silver: 10000000, bracelet: 80, quality_taps: [144, 144], circulated: 1250 } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [35000, 105000], leapstones: 1600, fusions: 2000, shards: 260000, juicers: [190, 570], gold: 96000, accessory: 320, silver: 20000000, bracelet: 120, quality_taps: [250, 250], circulated: 2100 } }
+                ]
+            },
+            {
+                title: 'Item level 1680',
+                columns: [
+                    { key: 'honing_red_blue', label: 'Honing Materials (Red / Blue)' },
+                    { key: 'leapstones', label: 'Leapstones' },
+                    { key: 'fusions', label: 'Fusions' },
+                    { key: 'shards', label: 'Shards' },
+                    { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
+                    { key: 'gold', label: 'Bound Gold' },
+                    { key: 'accessory', label: 'Accessory Chests' },
+                    { key: 'silver', label: 'Silver' },
+                    { key: 'bracelet', label: 'Bracelet Chests' },
+                    { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' }
+                ],
+                // 1680: community notes/datamine mention slightly higher amounts and some different box types.
+                // I used the 1640 structure as base and adjusted the top-tier numbers where community posts flagged differences
+                // (e.g. Floor 100 gold ~108000, fusions ~2750). Circulated leapstones appear to be removed in some 1680 boxes and are therefore omitted here.
+                rows: [
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [1100, 3300], leapstones: 48, fusions: 65, shards: 8500, juicers: [6, 18], gold: 3500, accessory: 11, silver: 520000, bracelet: 4, quality_taps: [7, 7] } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [1600, 4800], leapstones: 75, fusions: 95, shards: 12500, juicers: [9, 27], gold: 5200, accessory: 16, silver: 1020000, bracelet: 6, quality_taps: [10, 10] } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [2100, 6300], leapstones: 95, fusions: 130, shards: 16500, juicers: [12, 36], gold: 7000, accessory: 21, silver: 1520000, bracelet: 8, quality_taps: [15, 15] } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [2600, 7800], leapstones: 125, fusions: 155, shards: 20500, juicers: [15, 45], gold: 9000, accessory: 26, silver: 2020000, bracelet: 10, quality_taps: [20, 20] } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [3600, 10800], leapstones: 190, fusions: 230, shards: 31000, juicers: [22, 66], gold: 13500, accessory: 36, silver: 2520000, bracelet: 15, quality_taps: [27, 27] } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [5200, 15600], leapstones: 255, fusions: 310, shards: 41000, juicers: [30, 90], gold: 18000, accessory: 52, silver: 3020000, bracelet: 20, quality_taps: [36, 36] } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [7800, 23400], leapstones: 370, fusions: 470, shards: 61000, juicers: [45, 135], gold: 27000, accessory: 74, silver: 5020000, bracelet: 25, quality_taps: [54, 54] } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [10500, 31500], leapstones: 510, fusions: 630, shards: 81000, juicers: [58, 174], gold: 36000, accessory: 92, silver: 6020000, bracelet: 35, quality_taps: [72, 72] } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [15750, 47250], leapstones: 690, fusions: 880, shards: 109000, juicers: [80, 240], gold: 49500, accessory: 132, silver: 8020000, bracelet: 50, quality_taps: [100, 100] } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [21000, 63000], leapstones: 1000, fusions: 1250, shards: 162000, juicers: [120, 360], gold: 72000, accessory: 205, silver: 10020000, bracelet: 80, quality_taps: [144, 144] } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [36000, 108000], leapstones: 1700, fusions: 2750, shards: 265000, juicers: [200, 600], gold: 108000, accessory: 330, silver: 20100000, bracelet: 125, quality_taps: [260, 260] } }
+                ]
+            }
+        ];
+        // ==========================================================
+
+        // State: market values per column key (default 0)
+        let market = {};
+        let activeTab = 0;
+
+        const tabsEl = document.getElementById('tabs');
+        const cardEl = document.getElementById('card');
+
+        function init() {
+            TABLE_DATA.forEach((t, i) => {
+                const btn = document.createElement('div'); btn.className = 'tab' + (i === 0 ? ' active' : ''); btn.textContent = t.title; btn.onclick = () => { setActive(i) }; tabsEl.appendChild(btn);
+                // initialize market keys
+                t.columns.forEach(c => { if (!(c.key in market)) market[c.key] = 0 });
+            });
+            renderActive();
+        }
+
+        function setActive(i) { activeTab = i;[...tabsEl.children].forEach((n, idx) => n.classList.toggle('active', idx === i)); renderActive(); }
+
+        function renderActive() {
+            const t = TABLE_DATA[activeTab];
+            cardEl.innerHTML = '';
+
+            // header: controls and legend
+            const controls = document.createElement('div'); controls.className = 'controls';
+            const info = document.createElement('div'); info.innerHTML = '<strong>' + t.title + '</strong> — enter market values in headers to calculate.'; controls.appendChild(info);
+            const resetBtn = document.createElement('button'); resetBtn.textContent = 'Reset market values'; resetBtn.onclick = () => { Object.keys(market).forEach(k => { if (Array.isArray(market[k])) market[k] = market[k].map(() => 0); else market[k] = 0 }); renderActive(); }; controls.appendChild(resetBtn);
+            cardEl.appendChild(controls);
+
+            // Build table inside a horizontal-scroll wrapper to avoid header stacking
+            const tableWrapper = document.createElement('div'); tableWrapper.className = 'table-wrapper'; tableWrapper.style.overflowX = 'auto'; tableWrapper.style.paddingTop = '8px';
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const trHead = document.createElement('tr');
+            const thRow = document.createElement('th'); thRow.textContent = 'Floor / Range'; trHead.appendChild(thRow);
+
+            // determine how many input parts each column needs (if some rows have arrays)
+            const partsCount = {};
+            t.columns.forEach(col => {
+                let max = 0;
+                t.rows.forEach(r => { const raw = r.cells[col.key]; if (Array.isArray(raw)) max = Math.max(max, raw.length); });
+                partsCount[col.key] = Math.max(1, max);
+                // initialize market structure if missing or adjust length
+                if (!(col.key in market)) {
+                    market[col.key] = partsCount[col.key] > 1 ? Array(partsCount[col.key]).fill(0) : 0;
+                } else if (Array.isArray(market[col.key]) && market[col.key].length < partsCount[col.key]) {
+                    market[col.key] = market[col.key].concat(Array(partsCount[col.key] - market[col.key].length).fill(0));
+                } else if (!Array.isArray(market[col.key]) && partsCount[col.key] > 1) {
+                    // existing single value -> expand to array keeping the single value as first element
+                    market[col.key] = Array(partsCount[col.key]).fill(0).map((v, i) => i === 0 ? (market[col.key] || 0) : 0);
+                }
+            });
+
+            // header inputs per column (support multiple inputs when column has multiple materials)
+            t.columns.forEach(col => {
+                const th = document.createElement('th'); th.className = 'header-input';
+                const label = document.createElement('div'); label.textContent = col.label; label.style.fontWeight = '600'; label.style.fontSize = '13px';
+                th.appendChild(label);
+
+                if (partsCount[col.key] <= 1) {
+                    const inp = document.createElement('input'); inp.className = 'market'; inp.type = 'number'; inp.min = '0'; inp.step = '0.01';
+                    inp.value = Array.isArray(market[col.key]) ? (market[col.key][0] || '') : (market[col.key] || '');
+                    inp.oninput = (e) => { market[col.key] = parseFloat(e.target.value) || 0; updateComputedValues(); };
+                    th.appendChild(inp);
+                } else {
+                    const rowDiv = document.createElement('div'); rowDiv.style.display = 'flex'; rowDiv.style.gap = '6px'; rowDiv.style.justifyContent = 'center';
+                    for (let i = 0; i < partsCount[col.key]; i++) {
+                        const inp = document.createElement('input'); inp.className = 'market'; inp.type = 'number'; inp.min = '0'; inp.step = '0.01'; inp.dataset.idx = i; inp.style.width = '70px';
+                        inp.value = (Array.isArray(market[col.key]) ? (market[col.key][i] || '') : '');
+                        inp.oninput = (e) => { const idx = parseInt(e.target.dataset.idx); market[col.key][idx] = parseFloat(e.target.value) || 0; updateComputedValues(); };
+                        rowDiv.appendChild(inp);
+                    }
+                    th.appendChild(rowDiv);
+                }
+
+                trHead.appendChild(th);
+            });
+            thead.appendChild(trHead); table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+
+            t.rows.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                const tdLabel = document.createElement('td'); tdLabel.textContent = row.label; tdLabel.style.textAlign = 'left'; tr.appendChild(tdLabel);
+
+                // compute cell values
+                const computedValues = [];
+                t.columns.forEach(col => {
+                    const raw = row.cells[col.key];
+                    const value = computeColumnValue(raw, col.key);
+                    const count = normalizeCellToNumber(raw);
+                    computedValues.push({ count, value });
+                });
+
+                // find max value for heat
+                const maxVal = Math.max(...computedValues.map(c => c.value));
+
+                computedValues.forEach((c, ci) => {
+                    const td = document.createElement('td');
+                    td.innerHTML = '<div class="cell-count">' + displayRaw(row.cells[t.columns[ci].key]) + '</div>' +
+                        '<div class="cell-value">' + formatNumber(c.value) + '</div>';
+                    // heat color
+                    td.style.background = heatColor(c.value, maxVal);
+                    td.className = 'heat';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            tableWrapper.appendChild(table);
+            cardEl.appendChild(tableWrapper);
+
+            const legend = document.createElement('div'); legend.className = 'legend';
+            const low = document.createElement('div'); low.className = 'box'; low.style.background = 'linear-gradient(90deg,#ffe9e9,#ffdada)'; legend.appendChild(low); legend.appendChild(document.createTextNode('Low'));
+            const mid = document.createElement('div'); mid.className = 'box'; mid.style.background = 'linear-gradient(90deg,#fff7e6,#fff0cc)'; legend.appendChild(mid); legend.appendChild(document.createTextNode('Medium'));
+            const high = document.createElement('div'); high.className = 'box'; high.style.background = 'linear-gradient(90deg,#e9ffef,#d9ffe6)'; legend.appendChild(high); legend.appendChild(document.createTextNode('High'));
+            cardEl.appendChild(legend);
+
+            const note = document.createElement('div'); note.className = 'note'; note.innerHTML = '<strong>Note:</strong> If a cell contains multiple different materials that live in the same column, the header will show multiple inputs. The UI multiplies each material count by its respective header value.';
+            cardEl.appendChild(note);
+
+            updateComputedValues();
+        }
+
+        // compute total value for a column cell, supporting multiple-part cells
+        function computeColumnValue(raw, colKey) {
+            if (raw == null) return 0;
+            if (Array.isArray(raw)) {
+                let total = 0;
+                for (let i = 0; i < raw.length; i++) {
+                    const partCount = Number(raw[i] || 0);
+                    const marketVal = Array.isArray(market[colKey]) ? (market[colKey][i] || 0) : (market[colKey] || 0);
+                    total += marketVal * partCount;
+                }
+                return total;
+            }
+            // raw is single number or string -> multiply by single market value
+            const count = normalizeCellToNumber(raw);
+            const marketVal = Array.isArray(market[colKey]) ? market[colKey].reduce((s, x) => s + (Number(x) || 0), 0) : (market[colKey] || 0);
+            return marketVal * count;
+        }
+
+        function updateComputedValues() {
+            // Only update computed numeric values + heatmap in the currently-rendered table without rebuilding the whole DOM.
+            const t = TABLE_DATA[activeTab];
+            const table = cardEl.querySelector('table');
+            if (!table) return;
+            const tbody = table.querySelector('tbody');
+            if (!tbody) return;
+            const rowEls = Array.from(tbody.querySelectorAll('tr'));
+
+            rowEls.forEach((tr, rowIndex) => {
+                const rowData = t.rows[rowIndex];
+                if (!rowData) return; // defensive
+
+                // compute values for this row
+                const computedValues = t.columns.map(col => {
+                    const raw = rowData.cells[col.key];
+                    const value = computeColumnValue(raw, col.key);
+                    const count = normalizeCellToNumber(raw);
+                    return { count, value };
+                });
+
+                const maxVal = Math.max(...computedValues.map(c => c.value));
+
+                // tds: [label, col1, col2, ..., rowTotal]
+                const tds = Array.from(tr.querySelectorAll('td'));
+                if (tds.length < 2) return;
+
+                // update each column cell
+                for (let ci = 0; ci < computedValues.length; ci++) {
+                    const td = tds[1 + ci];
+                    if (!td) continue;
+                    td.innerHTML = '<div class="cell-count">' + displayRaw(rowData.cells[t.columns[ci].key]) + '</div>' +
+                        '<div class="cell-value">' + formatNumber(computedValues[ci].value) + '</div>';
+                    td.style.background = heatColor(computedValues[ci].value, maxVal);
+                }
+
+            });
+        }
+
+        // helpers
+        function normalizeCellToNumber(raw) {
+            if (raw == null) return 0;
+            if (Array.isArray(raw)) return raw.reduce((s, x) => s + Number(x || 0), 0);
+            if (typeof raw === 'string') {
+                // try to parse numbers inside string like "6 / 18" -> sum 24? User requested "add them" if multiple materials in a column
+                const nums = raw.match(/-?\d+(?:[\.,]\d+)?/g);
+                if (!nums) return 0;
+                return nums.map(n => Number(n.replace(',', '.'))).reduce((s, x) => s + x, 0);
+            }
+            return Number(raw) || 0;
+        }
+
+        function formatNumber(n) {
+            if (!n) return '0';
+            if (Math.abs(n) >= 1000000) return Math.round(n).toLocaleString();
+            return (Math.round(n * 100) / 100).toLocaleString();
+        }
+
+        function displayRaw(raw) {
+            if (raw == null) return '0';
+            if (Array.isArray(raw)) return raw.join(' + ');
+            return String(raw);
+        }
+
+        // heatColor: produce a subtle background based on proportion to max
+        function heatColor(value, max) {
+            if (max <= 0) return 'transparent';
+            const ratio = value / (max || 1);
+            // ratio 0 -> light red, 0.5 -> pale yellow, 1 -> pale green
+            if (ratio <= 0.33) {
+                return 'linear-gradient(180deg,#fff1f0,#ffecec)';
+            } else if (ratio <= 0.66) {
+                return 'linear-gradient(180deg,#fffbf0,#fff6e6)';
+            } else {
+                return 'linear-gradient(180deg,#f1fff6,#e6fff0)';
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

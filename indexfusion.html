@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abidos Fusion Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        input[type='number'] {
+            max-width: 100px;
+        }
+
+        .output {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-4">
+        <h1>Abidos Fusion Calculator</h1>
+        <form id="input-form" class="row g-3">
+            <div class="col-md-3">
+                <label for="abidosMV" class="form-label">Abidos MV</label>
+                <input type="number" class="form-control" id="abidosMV" value="129" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="timeReduction" class="form-label">Time Reduction</label>
+                <input type="number" class="form-control" id="timeReduction" value="0.22" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="goldPerCraft" class="form-label">Gold per Craft</label>
+                <input type="number" class="form-control" id="goldPerCraft" value="344" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="greaterSucChance" class="form-label">Greater Success Chance</label>
+                <input type="number" class="form-control" id="greaterSucChance" value="0.0872" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="energyCost" class="form-label">Energy Cost per Craft</label>
+                <input type="number" class="form-control" id="energyCost" value="266" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="energyRegen" class="form-label">Energy Regen per Day</label>
+                <input type="number" class="form-control" id="energyRegen" value="160" step="any">
+            </div>
+            <div class="col-md-3">
+                <label for="weeklyEnergy" class="form-label">Weekly Energy Gain</label>
+                <input type="number" class="form-control" id="weeklyEnergy" value="15000" step="any">
+            </div>
+        </form>
+
+        <hr />
+
+        <h4>Berechnungen</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <p>Crafts per Day: <span id="craftsPerDay" class="output">0</span></p>
+            </div>
+            <div class="col-md-4">
+                <p>Gold per Day: <span id="goldPerDay" class="output">0</span></p>
+            </div>
+            <div class="col-md-4">
+                <p>Total Energy per Week: <span id="totalEnergyWeek" class="output">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
