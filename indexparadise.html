@@ -132,9 +132,6 @@
 
 <body>
     <h2>Paradise — Hell Rewards (interactive)</h2>
-    <p class="small">3 tabs for the 3 Item Level reward tables. Add real table data into the <code>TABLE_DATA</code>
-        variable in the script (see comments) and the UI will auto-calculate MarketValue * Count and highlight best
-        per-row values.</p>
 
     <div class="tabs" id="tabs"></div>
     <div class="card" id="card"></div>
@@ -419,9 +416,6 @@
             const mid = document.createElement('div'); mid.className = 'box'; mid.style.background = 'linear-gradient(90deg,#fff7e6,#fff0cc)'; legend.appendChild(mid); legend.appendChild(document.createTextNode('Medium'));
             const high = document.createElement('div'); high.className = 'box'; high.style.background = 'linear-gradient(90deg,#e9ffef,#d9ffe6)'; legend.appendChild(high); legend.appendChild(document.createTextNode('High'));
             cardEl.appendChild(legend);
-
-            const note = document.createElement('div'); note.className = 'note'; note.innerHTML = '<strong>Note:</strong> If a cell contains multiple different materials that live in the same column, the header will show multiple inputs. The UI multiplies each material count by its respective header value.';
-            cardEl.appendChild(note);
 
             updateComputedValues();
         }
