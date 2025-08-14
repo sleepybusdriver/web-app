@@ -162,27 +162,22 @@
                     { key: 'shards', label: 'Shards' },
                     { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
                     { key: 'gold', label: 'Bound Gold' },
-                    { key: 'accessory', label: 'Accessory Chests' },
                     { key: 'silver', label: 'Silver' },
-                    { key: 'bracelet', label: 'Bracelet Chests' },
                     { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' },
                     { key: 'circulated', label: 'Circulated Leapstones' }
                 ],
-                // NOTE: 1580 values: community posts indicate different key tiers (T3/T4) affect quantities.
-                // Below I used the same base structure as the 1640 table but adjusted the Floor 100 fusions to 2600 (community-reported for 1580 Tier3).
-                // Treat 1580 table as "best-effort / community-derived" — see citations in the editor notes.
                 rows: [
-                    { label: 'Floor 1-9', cells: { honing_red_blue: [900, 2700], leapstones: 40, fusions: 55, shards: 7000, juicers: [5, 15], gold: 2800, accessory: 9, silver: 450000, bracelet: 3, quality_taps: [6, 6], circulated: 50 } },
-                    { label: 'Floor 10-19', cells: { honing_red_blue: [1400, 4200], leapstones: 65, fusions: 85, shards: 11000, juicers: [8, 24], gold: 4200, accessory: 13, silver: 900000, bracelet: 5, quality_taps: [9, 9], circulated: 80 } },
-                    { label: 'Floor 20-29', cells: { honing_red_blue: [1800, 5400], leapstones: 85, fusions: 115, shards: 15000, juicers: [11, 33], gold: 5600, accessory: 18, silver: 1400000, bracelet: 7, quality_taps: [14, 14], circulated: 120 } },
-                    { label: 'Floor 30-39', cells: { honing_red_blue: [2300, 6900], leapstones: 110, fusions: 140, shards: 18500, juicers: [14, 42], gold: 7000, accessory: 22, silver: 1850000, bracelet: 9, quality_taps: [18, 18], circulated: 150 } },
-                    { label: 'Floor 40-49', cells: { honing_red_blue: [3200, 9600], leapstones: 170, fusions: 210, shards: 27000, juicers: [20, 60], gold: 10500, accessory: 30, silver: 2300000, bracelet: 13, quality_taps: [25, 25], circulated: 190 } },
-                    { label: 'Floor 50-59', cells: { honing_red_blue: [4600, 13800], leapstones: 225, fusions: 285, shards: 36000, juicers: [27, 81], gold: 14000, accessory: 42, silver: 2800000, bracelet: 17, quality_taps: [33, 33], circulated: 300 } },
-                    { label: 'Floor 60-69', cells: { honing_red_blue: [7000, 21000], leapstones: 330, fusions: 420, shards: 54000, juicers: [40, 120], gold: 21000, accessory: 60, silver: 4600000, bracelet: 22, quality_taps: [49, 49], circulated: 420 } },
-                    { label: 'Floor 70-79', cells: { honing_red_blue: [9500, 28500], leapstones: 450, fusions: 560, shards: 72000, juicers: [52, 156], gold: 28000, accessory: 75, silver: 5600000, bracelet: 30, quality_taps: [65, 65], circulated: 600 } },
-                    { label: 'Floor 80-89', cells: { honing_red_blue: [14000, 42000], leapstones: 600, fusions: 780, shards: 97000, juicers: [72, 216], gold: 38000, accessory: 110, silver: 7400000, bracelet: 42, quality_taps: [90, 90], circulated: 780 } },
-                    { label: 'Floor 90-99', cells: { honing_red_blue: [18500, 55500], leapstones: 880, fusions: 1100, shards: 142000, juicers: [108, 324], gold: 56000, accessory: 180, silver: 9200000, bracelet: 68, quality_taps: [130, 130], circulated: 1100 } },
-                    { label: 'Floor 100', cells: { honing_red_blue: [32000, 96000], leapstones: 1500, fusions: 2600, shards: 230000, juicers: [170, 510], gold: 88000, accessory: 260, silver: 18000000, bracelet: 100, quality_taps: [220, 220], circulated: 1800 } }
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [2500, 7500], leapstones: 80, fusions: 75, shards: 18000, juicers: [144, 48, 24], gold: 2500, silver: 500000, quality_taps: [7, 7], circulated: 40 } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [3600, 10800], leapstones: 120, fusions: 125, shards: 27000, juicers: [216, 72, 36], gold: 4000, silver: 1000000, quality_taps: [10, 10], circulated: 60 } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [5000, 15000], leapstones: 160, fusions: 150, shards: 36000, juicers: [324, 108, 54], gold: 5500, silver: 1500000, quality_taps: [15, 15], circulated: 80 } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [6500, 19500], leapstones: 200, fusions: 200, shards: 45000, juicers: [360, 120, 60], gold: 6500, silver: 2000000, quality_taps: [20, 20], circulated: 100 } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [9500, 28500], leapstones: 300, fusions: 300, shards: 70000, juicers: [576, 192, 96], gold: 10000, silver: 2500000, quality_taps: [27, 27], circulated: 150 } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [12500, 37500], leapstones: 400, fusions: 400, shards: 90000, juicers: [792, 264, 132], gold: 13000, silver: 3000000, quality_taps: [36, 36], circulated: 200 } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [18000, 54000], leapstones: 600, fusions: 600, shards: 135000, juicers: [1152, 384, 192], gold: 19500, silver: 5000000, quality_taps: [54, 54], circulated: 300 } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [25000, 75000], leapstones: 800, fusions: 800, shards: 180000, juicers: [1620, 540, 270], gold: 26000, silver: 6000000, quality_taps: [72, 72], circulated: 400 } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [35000, 105000], leapstones: 1000, fusions: 1000, shards: 250000, juicers: [2160, 720, 360], gold: 36000, silver: 8000000, quality_taps: [100, 100], circulated: 600 } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [50000, 150000], leapstones: 1600, fusions: 1600, shards: 360000, juicers: [3060, 1020, 510], gold: 42000, silver: 10000000, quality_taps: [144, 144], circulated: 800 } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [65000, 255000], leapstones: 2600, fusions: 2600, shards: 600000, juicers: [5220, 1740, 870], gold: 78000, silver: 20000000, quality_taps: [250, 250], circulated: 1400 } }
                 ]
             },
             {
@@ -194,25 +189,22 @@
                     { key: 'shards', label: 'Shards' },
                     { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
                     { key: 'gold', label: 'Bound Gold' },
-                    { key: 'accessory', label: 'Accessory Chests' },
                     { key: 'silver', label: 'Silver' },
-                    { key: 'bracelet', label: 'Bracelet Chests' },
                     { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' },
                     { key: 'circulated', label: 'Circulated Leapstones' }
                 ],
-                // This table is taken from community datamine (China build) and mirrored across several community sources.
                 rows: [
-                    { label: 'Floor 1-9', cells: { honing_red_blue: [1000, 3000], leapstones: 45, fusions: 60, shards: 8000, juicers: [6, 18], gold: 3200, accessory: 10, silver: 500000, bracelet: 4, quality_taps: [7, 7], circulated: 60 } },
-                    { label: 'Floor 10-19', cells: { honing_red_blue: [1500, 4500], leapstones: 70, fusions: 90, shards: 12000, juicers: [9, 27], gold: 4800, accessory: 15, silver: 1000000, bracelet: 6, quality_taps: [10, 10], circulated: 90 } },
-                    { label: 'Floor 20-29', cells: { honing_red_blue: [2000, 6000], leapstones: 90, fusions: 125, shards: 16000, juicers: [12, 36], gold: 6400, accessory: 20, silver: 1500000, bracelet: 8, quality_taps: [15, 15], circulated: 130 } },
-                    { label: 'Floor 30-39', cells: { honing_red_blue: [2500, 7500], leapstones: 120, fusions: 150, shards: 20000, juicers: [15, 45], gold: 8000, accessory: 25, silver: 2000000, bracelet: 10, quality_taps: [20, 20], circulated: 160 } },
-                    { label: 'Floor 40-49', cells: { honing_red_blue: [3500, 10500], leapstones: 180, fusions: 225, shards: 30000, juicers: [22, 66], gold: 12000, accessory: 35, silver: 2500000, bracelet: 15, quality_taps: [27, 27], circulated: 200 } },
-                    { label: 'Floor 50-59', cells: { honing_red_blue: [5000, 15000], leapstones: 240, fusions: 300, shards: 40000, juicers: [30, 90], gold: 16000, accessory: 50, silver: 3000000, bracelet: 20, quality_taps: [36, 36], circulated: 320 } },
-                    { label: 'Floor 60-69', cells: { honing_red_blue: [7500, 22500], leapstones: 350, fusions: 450, shards: 60000, juicers: [45, 135], gold: 24000, accessory: 70, silver: 5000000, bracelet: 25, quality_taps: [54, 54], circulated: 450 } },
-                    { label: 'Floor 70-79', cells: { honing_red_blue: [10000, 30000], leapstones: 480, fusions: 600, shards: 80000, juicers: [58, 174], gold: 32000, accessory: 90, silver: 6000000, bracelet: 35, quality_taps: [72, 72], circulated: 650 } },
-                    { label: 'Floor 80-89', cells: { honing_red_blue: [15000, 45000], leapstones: 650, fusions: 850, shards: 108000, juicers: [80, 240], gold: 44000, accessory: 130, silver: 8000000, bracelet: 50, quality_taps: [100, 100], circulated: 850 } },
-                    { label: 'Floor 90-99', cells: { honing_red_blue: [20000, 60000], leapstones: 950, fusions: 1200, shards: 160000, juicers: [120, 360], gold: 64000, accessory: 200, silver: 10000000, bracelet: 80, quality_taps: [144, 144], circulated: 1250 } },
-                    { label: 'Floor 100', cells: { honing_red_blue: [35000, 105000], leapstones: 1600, fusions: 2000, shards: 260000, juicers: [190, 570], gold: 96000, accessory: 320, silver: 20000000, bracelet: 120, quality_taps: [250, 250], circulated: 2100 } }
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [1000, 3000], leapstones: 45, fusions: 60, shards: 8000, juicers: [6, 18], gold: 3200, silver: 500000, quality_taps: [7, 7], circulated: 60 } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [1500, 4500], leapstones: 70, fusions: 90, shards: 12000, juicers: [9, 27], gold: 4800, silver: 1000000, quality_taps: [10, 10], circulated: 90 } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [2000, 6000], leapstones: 90, fusions: 125, shards: 16000, juicers: [12, 36], gold: 6400, silver: 1500000, quality_taps: [15, 15], circulated: 130 } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [2500, 7500], leapstones: 120, fusions: 150, shards: 20000, juicers: [15, 45], gold: 8000, silver: 2000000, quality_taps: [20, 20], circulated: 160 } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [3500, 10500], leapstones: 180, fusions: 225, shards: 30000, juicers: [22, 66], gold: 12000, silver: 2500000, quality_taps: [27, 27], circulated: 200 } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [5000, 15000], leapstones: 240, fusions: 300, shards: 40000, juicers: [30, 90], gold: 16000, silver: 3000000, quality_taps: [36, 36], circulated: 320 } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [7500, 22500], leapstones: 350, fusions: 450, shards: 60000, juicers: [45, 135], gold: 24000, silver: 5000000, quality_taps: [54, 54], circulated: 450 } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [10000, 30000], leapstones: 480, fusions: 600, shards: 80000, juicers: [58, 174], gold: 32000, silver: 6000000, quality_taps: [72, 72], circulated: 650 } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [15000, 45000], leapstones: 650, fusions: 850, shards: 108000, juicers: [80, 240], gold: 44000, silver: 8000000, quality_taps: [100, 100], circulated: 850 } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [20000, 60000], leapstones: 950, fusions: 1200, shards: 160000, juicers: [120, 360], gold: 64000, silver: 10000000, quality_taps: [144, 144], circulated: 1250 } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [35000, 105000], leapstones: 1600, fusions: 2000, shards: 260000, juicers: [190, 570], gold: 96000, silver: 20000000, quality_taps: [250, 250], circulated: 2100 } }
                 ]
             },
             {
@@ -224,26 +216,21 @@
                     { key: 'shards', label: 'Shards' },
                     { key: 'juicers', label: 'Juicers (Lava / Glacier)' },
                     { key: 'gold', label: 'Bound Gold' },
-                    { key: 'accessory', label: 'Accessory Chests' },
                     { key: 'silver', label: 'Silver' },
-                    { key: 'bracelet', label: 'Bracelet Chests' },
                     { key: 'quality_taps', label: 'Quality Taps (Wep / Armor)' }
                 ],
-                // 1680: community notes/datamine mention slightly higher amounts and some different box types.
-                // I used the 1640 structure as base and adjusted the top-tier numbers where community posts flagged differences
-                // (e.g. Floor 100 gold ~108000, fusions ~2750). Circulated leapstones appear to be removed in some 1680 boxes and are therefore omitted here.
                 rows: [
-                    { label: 'Floor 1-9', cells: { honing_red_blue: [1100, 3300], leapstones: 48, fusions: 65, shards: 8500, juicers: [6, 18], gold: 3500, accessory: 11, silver: 520000, bracelet: 4, quality_taps: [7, 7] } },
-                    { label: 'Floor 10-19', cells: { honing_red_blue: [1600, 4800], leapstones: 75, fusions: 95, shards: 12500, juicers: [9, 27], gold: 5200, accessory: 16, silver: 1020000, bracelet: 6, quality_taps: [10, 10] } },
-                    { label: 'Floor 20-29', cells: { honing_red_blue: [2100, 6300], leapstones: 95, fusions: 130, shards: 16500, juicers: [12, 36], gold: 7000, accessory: 21, silver: 1520000, bracelet: 8, quality_taps: [15, 15] } },
-                    { label: 'Floor 30-39', cells: { honing_red_blue: [2600, 7800], leapstones: 125, fusions: 155, shards: 20500, juicers: [15, 45], gold: 9000, accessory: 26, silver: 2020000, bracelet: 10, quality_taps: [20, 20] } },
-                    { label: 'Floor 40-49', cells: { honing_red_blue: [3600, 10800], leapstones: 190, fusions: 230, shards: 31000, juicers: [22, 66], gold: 13500, accessory: 36, silver: 2520000, bracelet: 15, quality_taps: [27, 27] } },
-                    { label: 'Floor 50-59', cells: { honing_red_blue: [5200, 15600], leapstones: 255, fusions: 310, shards: 41000, juicers: [30, 90], gold: 18000, accessory: 52, silver: 3020000, bracelet: 20, quality_taps: [36, 36] } },
-                    { label: 'Floor 60-69', cells: { honing_red_blue: [7800, 23400], leapstones: 370, fusions: 470, shards: 61000, juicers: [45, 135], gold: 27000, accessory: 74, silver: 5020000, bracelet: 25, quality_taps: [54, 54] } },
-                    { label: 'Floor 70-79', cells: { honing_red_blue: [10500, 31500], leapstones: 510, fusions: 630, shards: 81000, juicers: [58, 174], gold: 36000, accessory: 92, silver: 6020000, bracelet: 35, quality_taps: [72, 72] } },
-                    { label: 'Floor 80-89', cells: { honing_red_blue: [15750, 47250], leapstones: 690, fusions: 880, shards: 109000, juicers: [80, 240], gold: 49500, accessory: 132, silver: 8020000, bracelet: 50, quality_taps: [100, 100] } },
-                    { label: 'Floor 90-99', cells: { honing_red_blue: [21000, 63000], leapstones: 1000, fusions: 1250, shards: 162000, juicers: [120, 360], gold: 72000, accessory: 205, silver: 10020000, bracelet: 80, quality_taps: [144, 144] } },
-                    { label: 'Floor 100', cells: { honing_red_blue: [36000, 108000], leapstones: 1700, fusions: 2750, shards: 265000, juicers: [200, 600], gold: 108000, accessory: 330, silver: 20100000, bracelet: 125, quality_taps: [260, 260] } }
+                    { label: 'Floor 1-9', cells: { honing_red_blue: [1800, 5400], leapstones: 70, fusions: 85, shards: 12000, juicers: [8, 24], gold: 3500, silver: 500000, quality_taps: [7, 7], circulated: 80 } },
+                    { label: 'Floor 10-19', cells: { honing_red_blue: [2500, 7500], leapstones: 100, fusions: 125, shards: 16000, juicers: [23, 36], gold: 5500, silver: 1000000, quality_taps: [10, 10], circulated: 130 } },
+                    { label: 'Floor 20-29', cells: { honing_red_blue: [3500, 10500], leapstones: 140, fusions: 165, shards: 21000, juicers: [15, 45], gold: 7500, silver: 1500000, quality_taps: [15, 15], circulated: 180 } },
+                    { label: 'Floor 30-39', cells: { honing_red_blue: [4200, 12600], leapstones: 180, fusions: 210, shards: 27000, juicers: [20, 60], gold: 9000, silver: 2000000, quality_taps: [20, 20], circulated: 210 } },
+                    { label: 'Floor 40-49', cells: { honing_red_blue: [6400, 19200], leapstones: 270, fusions: 310, shards: 42000, juicers: [30, 90], gold: 13500, silver: 2500000, quality_taps: [27, 27], circulated: 320 } },
+                    { label: 'Floor 50-59', cells: { honing_red_blue: [8500, 25500], leapstones: 360, fusions: 415, shards: 56000, juicers: [40, 120], gold: 18000, silver: 3000000, quality_taps: [36, 36], circulated: 430 } },
+                    { label: 'Floor 60-69', cells: { honing_red_blue: [12000, 36000], leapstones: 540, fusions: 630, shards: 84000, juicers: [60, 180], gold: 27000, silver: 5000000, quality_taps: [54, 54], circulated: 650 } },
+                    { label: 'Floor 70-79', cells: { honing_red_blue: [18000, 54000], leapstones: 700, fusions: 830, shards: 120000, juicers: [75, 225], gold: 36000, silver: 6000000, quality_taps: [72, 72], circulated: 860 } },
+                    { label: 'Floor 80-89', cells: { honing_red_blue: [24000, 72000], leapstones: 950, fusions: 1150, shards: 160000, juicers: [105, 315], gold: 50000, silver: 8000000, quality_taps: [100, 100], circulated: 1200 } },
+                    { label: 'Floor 90-99', cells: { honing_red_blue: [35000, 105000], leapstones: 1500, fusions: 1650, shards: 220000, juicers: [155, 465], gold: 72000, silver: 10000000, quality_taps: [144, 144], circulated: 1700 } },
+                    { label: 'Floor 100', cells: { honing_red_blue: [56000, 168000], leapstones: 2400, fusions: 2400, shards: 380000, juicers: [256, 768], gold: 108000, silver: 20000000, quality_taps: [250, 250], circulated: 2800 } }
                 ]
             }
         ];
@@ -252,6 +239,18 @@
         // State: market values per column key (default 0)
         let market = {};
         let activeTab = 0;
+
+        // persist market values across reloads
+        function loadMarket() {
+            try {
+                const s = localStorage.getItem('paradise_market');
+                if (s) { const parsed = JSON.parse(s); if (typeof parsed === 'object') market = parsed; }
+            } catch (e) { console.warn('failed to load market from storage', e); }
+        }
+        function saveMarket() {
+            try { localStorage.setItem('paradise_market', JSON.stringify(market)); } catch (e) { }
+        }
+        loadMarket();
 
         const tabsEl = document.getElementById('tabs');
         const cardEl = document.getElementById('card');
@@ -274,7 +273,7 @@
             // header: controls and legend
             const controls = document.createElement('div'); controls.className = 'controls';
             const info = document.createElement('div'); info.innerHTML = '<strong>' + t.title + '</strong> — enter market values in headers to calculate.'; controls.appendChild(info);
-            const resetBtn = document.createElement('button'); resetBtn.textContent = 'Reset market values'; resetBtn.onclick = () => { Object.keys(market).forEach(k => { if (Array.isArray(market[k])) market[k] = market[k].map(() => 0); else market[k] = 0 }); renderActive(); }; controls.appendChild(resetBtn);
+            const resetBtn = document.createElement('button'); resetBtn.textContent = 'Reset market values'; resetBtn.onclick = () => { Object.keys(market).forEach(k => { if (Array.isArray(market[k])) market[k] = market[k].map(() => 0); else market[k] = 0 }); saveMarket(); renderActive(); }; controls.appendChild(resetBtn);
             cardEl.appendChild(controls);
 
             // Build table inside a horizontal-scroll wrapper to avoid header stacking
@@ -307,17 +306,19 @@
                 const label = document.createElement('div'); label.textContent = col.label; label.style.fontWeight = '600'; label.style.fontSize = '13px';
                 th.appendChild(label);
 
-                if (partsCount[col.key] <= 1) {
-                    const inp = document.createElement('input'); inp.className = 'market'; inp.type = 'number'; inp.min = '0'; inp.step = '0.01';
+                if (col.key === 'gold') {
+                    const fixed = document.createElement('div'); fixed.textContent = '1'; fixed.className = 'small'; th.appendChild(fixed);
+                } else if (partsCount[col.key] <= 1) {
+                    const inp = document.createElement('input'); inp.className = 'market'; inp.type = 'number'; inp.min = '0'; inp.step = '1';
                     inp.value = Array.isArray(market[col.key]) ? (market[col.key][0] || '') : (market[col.key] || '');
-                    inp.oninput = (e) => { market[col.key] = parseFloat(e.target.value) || 0; updateComputedValues(); };
+                    inp.oninput = (e) => { market[col.key] = parseFloat(e.target.value) || 0; saveMarket(); updateComputedValues(); };
                     th.appendChild(inp);
                 } else {
                     const rowDiv = document.createElement('div'); rowDiv.style.display = 'flex'; rowDiv.style.gap = '6px'; rowDiv.style.justifyContent = 'center';
                     for (let i = 0; i < partsCount[col.key]; i++) {
                         const inp = document.createElement('input'); inp.className = 'market'; inp.type = 'number'; inp.min = '0'; inp.step = '0.01'; inp.dataset.idx = i; inp.style.width = '70px';
                         inp.value = (Array.isArray(market[col.key]) ? (market[col.key][i] || '') : '');
-                        inp.oninput = (e) => { const idx = parseInt(e.target.dataset.idx); market[col.key][idx] = parseFloat(e.target.value) || 0; updateComputedValues(); };
+                        inp.oninput = (e) => { const idx = parseInt(e.target.dataset.idx); market[col.key][idx] = parseFloat(e.target.value) || 0; saveMarket(); updateComputedValues(); };
                         rowDiv.appendChild(inp);
                     }
                     th.appendChild(rowDiv);
@@ -376,6 +377,11 @@
         // compute total value for a column cell, supporting multiple-part cells
         function computeColumnValue(raw, colKey) {
             if (raw == null) return 0;
+            // gold column has implicit market value of 1 (1 gold = 1)
+            if (colKey === 'gold') {
+                const count = normalizeCellToNumber(raw);
+                return count * 1;
+            }
             if (Array.isArray(raw)) {
                 let total = 0;
                 for (let i = 0; i < raw.length; i++) {
